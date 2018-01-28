@@ -1,0 +1,63 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "extension",
+            "otherEntityName": "extension",
+            "otherEntityRelationshipName": "extensionKey"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "requirementSet",
+            "otherEntityName": "requirementSet",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "section",
+            "fieldType": "ExtensionSection",
+            "fieldValues": "STATUS,ENHANCEMENT",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "ExtensionType",
+            "fieldValues": "ENUM,FREETEXT"
+        },
+        {
+            "fieldName": "showOrder",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20180128122830",
+    "javadoc": "Describes properties of one type of a requirement extension.",
+    "entityTableName": "extension_key",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "requirementManagement"
+}

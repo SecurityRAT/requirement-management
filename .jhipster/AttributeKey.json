@@ -1,0 +1,58 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "attribute",
+            "otherEntityName": "attribute",
+            "otherEntityRelationshipName": "attributeKey"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "requirementSet",
+            "otherEntityName": "requirementSet",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "AttributeType",
+            "fieldValues": "FE_TAG,PARAMETER,CATEGORY",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "showOrder",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20180128122828",
+    "javadoc": "Describes one group/collection of requirement attributes.\nE.g. 'Criticality' for Low, Medium, High.",
+    "entityTableName": "attribute_key",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "requirementManagement"
+}

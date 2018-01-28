@@ -1,0 +1,56 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "attributeKey",
+            "otherEntityName": "attributeKey",
+            "otherEntityRelationshipName": "requirementSet"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "skeleton",
+            "otherEntityName": "skeleton",
+            "otherEntityRelationshipName": "requirementSet"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "extensionKey",
+            "otherEntityName": "extensionKey",
+            "otherEntityRelationshipName": "requirementSet"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "showOrder",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20180128122826",
+    "javadoc": "Requirements are organized in different sets.\nThese define also the structure of contained requirements.\nSelecting a suitable requirement set is the initial step when creating a 'case'.",
+    "entityTableName": "requirement_set",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "requirementManagement"
+}

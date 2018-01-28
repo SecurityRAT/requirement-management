@@ -1,0 +1,32 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "skeleton",
+            "otherEntityName": "skeleton",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "attribute",
+            "otherEntityName": "attribute",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "extension",
+            "otherEntityName": "extension",
+            "otherEntityField": "content"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20180128122832",
+    "javadoc": "Implements ternary relation of req. skeleton, attribute an extension.\nRequirement extension can be added to a skeleton if a particular attribute is set.",
+    "entityTableName": "sk_at_ex",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "requirementManagement"
+}
