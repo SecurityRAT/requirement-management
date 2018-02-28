@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Extension.
+    -->
+    <changeSet id="20180128122831-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="extension_key_id"
+                                 baseTableName="extension"
+                                 constraintName="fk_extension_extension_key_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="extension_key"/>
+
+    </changeSet>
+</databaseChangeLog>
