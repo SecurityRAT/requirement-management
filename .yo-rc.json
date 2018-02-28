@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "org.securityrat.requirementmanagement"
     },
-    "jhipsterVersion": "4.13.3",
+    "jhipsterVersion": "4.14.1",
     "baseName": "requirementManagement",
     "packageName": "org.securityrat.requirementmanagement",
     "packageFolder": "org/securityrat/requirementmanagement",
@@ -27,6 +27,7 @@
     "jhiPrefix": "jhi",
     "clientPackageManager": "yarn",
     "skipClient": true,
-    "skipUserManagement": true
+    "skipUserManagement": true,
+    "enableHibernateCache": false
   }
 }
