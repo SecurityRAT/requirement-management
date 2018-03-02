@@ -116,7 +116,7 @@ jhipster:
             port: 2003
             prefix: requirementManagement
         prometheus:
-            enabled: false
+            enabled: true
             endpoint: /prometheusMetrics
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
