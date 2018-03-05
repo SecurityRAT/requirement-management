@@ -1,0 +1,46 @@
+os:
+- linux
+services:
+- docker
+language: node_js
+node_js:
+- 8.9.4
+jdk:
+- oraclejdk8
+sudo: false
+cache:
+  directories:
+  - node
+  - node_modules
+  - "$HOME/.m2"
+  - "$HOME/.yarn-cache"
+env:
+  global:
+  - REPOS_SCRIPTS=$TRAVIS_BUILD_DIR/travis/scripts
+  - NODE_VERSION=8.9.4
+  - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
+  - SPRING_JPA_SHOW_SQL=false
+  - DOCKER_REPO=securityrat/requirement-management
+before_install:
+- jdk_switcher use oraclejdk8
+- java -version
+- sudo /etc/init.d/mysql stop
+- sudo /etc/init.d/postgresql stop
+- curl -o- -L https://yarnpkg.com/install.sh | bash
+- export PATH=$HOME/.yarn/bin:$PATH
+install:
+- yarn install
+script:
+- chmod +x mvnw
+- "./mvnw clean test"
+- "./mvnw verify -Pprod -DskipTests -Ddocker.repository=$DOCKER_REPO"
+deploy:
+  provider: script
+  script: bash $REPOS_SCRIPTS/docker_push
+  on:
+    branch: master
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+    on_start: false

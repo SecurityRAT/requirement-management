@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.securityrat.requirementmanagement</groupId>
     <artifactId>requirement-management</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Requirement Management</name>
-
     <properties>
         <!-- Build properties -->
         <maven.version>3.0.0</maven.version>
@@ -24,10 +24,10 @@
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
+        <docker.repository>securityrat/requirement-management</docker.repository>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
-
         <!-- Dependency versions -->
         <jhipster-dependencies.version>0.1.8</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
@@ -45,7 +45,6 @@
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
-
         <!-- Plugin versions -->
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
@@ -58,7 +57,6 @@
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
-
         <!-- Sonar properties -->
         <sonar.exclusions>src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, target/www/**/*.*</sonar.exclusions>
         <sonar.issue.ignore.multicriteria>S3437,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
@@ -79,10 +77,8 @@
         <sonar.sources>${project.basedir}/src/main/</sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/src/test/</sonar.tests>
-
         <!-- jhipster-needle-maven-property -->
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -95,7 +91,6 @@
             <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>io.github.jhipster</groupId>
@@ -334,7 +329,6 @@
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
-
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
@@ -355,7 +349,6 @@
                             <artifactId>hibernate-jpamodelgen</artifactId>
                             <version>${hibernate.version}</version>
                         </path>
-
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
@@ -558,21 +551,36 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>${dockerfile-maven-plugin.version}</version>
-                <!--
-                Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
+                <!-- Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy -->
                 <executions>
                     <execution>
-                    <id>default</id>
-                    <goals>
-                        <goal>build</goal>
-                        <goal>push</goal>
-                    </goals>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <!-- <goal>push</goal> -->
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>tag-version</id>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <tag>v${project.version}</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>tag-latest</id>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <tag>latest</tag>
+                        </configuration>
                     </execution>
                 </executions>
-                -->
                 <configuration>
-                    <repository>requirementmanagement</repository>
-                    <tag>latest</tag>
+                    <repository>${docker.repository}</repository>
                     <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
             </plugin>
@@ -595,12 +603,8 @@
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>org.jacoco</groupId>
-                                        <artifactId>
-                                            jacoco-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            ${jacoco-maven-plugin.version}
-                                        </versionRange>
+                                        <artifactId>                                            jacoco-maven-plugin                                        </artifactId>
+                                        <versionRange>                                            ${jacoco-maven-plugin.version}                                        </versionRange>
                                         <goals>
                                             <goal>prepare-agent</goal>
                                         </goals>
@@ -715,21 +719,21 @@
                         <groupId>pl.project13.maven</groupId>
                         <artifactId>git-commit-id-plugin</artifactId>
                         <version>2.2.4</version>
-                            <executions>
-                                <execution>
-                                    <goals>
-                                        <goal>revision</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                            <configuration>
-                                <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                                <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                                <includeOnlyProperties>
-                                    <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
-                                    <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
-                                    <includeOnlyProperty>^git.branch$</includeOnlyProperty>
-                                </includeOnlyProperties>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>revision</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                            <includeOnlyProperties>
+                                <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                                <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
+                                <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                            </includeOnlyProperties>
                         </configuration>
                     </plugin>
                 </plugins>
