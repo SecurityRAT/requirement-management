@@ -43,7 +43,7 @@ install:
 - yarn install
 script:
 - chmod +x mvnw
-- "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar"
+- "./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar"
 before_deploy:
 - "./mvnw verify -Pprod -DskipTests -Ddocker.repository=$DOCKER_REPO"
 deploy:
