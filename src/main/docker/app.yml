@@ -1,7 +1,7 @@
 version: '2'
 services:
     requirementmanagement-app:
-        image: requirementmanagement
+        image: securityrat/requirement-management
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_CLOUD_CONSUL_HOST=consul
