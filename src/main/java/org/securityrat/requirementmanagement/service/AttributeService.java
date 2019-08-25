@@ -4,14 +4,16 @@ import org.securityrat.requirementmanagement.domain.Attribute;
 import org.securityrat.requirementmanagement.repository.AttributeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
- * Service Implementation for managing Attribute.
+ * Service Implementation for managing {@link Attribute}.
  */
 @Service
 @Transactional
@@ -28,8 +30,8 @@ public class AttributeService {
     /**
      * Save a attribute.
      *
-     * @param attribute the entity to save
-     * @return the persisted entity
+     * @param attribute the entity to save.
+     * @return the persisted entity.
      */
     public Attribute save(Attribute attribute) {
         log.debug("Request to save Attribute : {}", attribute);
@@ -39,8 +41,8 @@ public class AttributeService {
     /**
      * Get all the attributes.
      *
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<Attribute> findAll(Pageable pageable) {
@@ -48,25 +50,26 @@ public class AttributeService {
         return attributeRepository.findAll(pageable);
     }
 
+
     /**
      * Get one attribute by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Attribute findOne(Long id) {
+    public Optional<Attribute> findOne(Long id) {
         log.debug("Request to get Attribute : {}", id);
-        return attributeRepository.findOne(id);
+        return attributeRepository.findById(id);
     }
 
     /**
      * Delete the attribute by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete Attribute : {}", id);
-        attributeRepository.delete(id);
+        attributeRepository.deleteById(id);
     }
 }

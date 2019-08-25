@@ -1,6 +1,8 @@
 package org.securityrat.requirementmanagement.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
+import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -9,22 +11,18 @@ import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
-
-
-
-
-
 /**
- * Criteria class for the Attribute entity. This class is used in AttributeResource to
- * receive all the possible filtering options from the Http GET request parameters.
- * For example the following could be a valid requests:
- * <code> /attributes?id.greaterThan=5&amp;attr1.contains=something&amp;attr2.specified=false</code>
+ * Criteria class for the {@link org.securityrat.requirementmanagement.domain.Attribute} entity. This class is used
+ * in {@link org.securityrat.requirementmanagement.web.rest.AttributeResource} to receive all the possible filtering options from
+ * the Http GET request parameters.
+ * For example the following could be a valid request:
+ * {@code /attributes?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class AttributeCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class AttributeCriteria implements Serializable, Criteria {
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -40,7 +38,22 @@ public class AttributeCriteria implements Serializable {
 
     private LongFilter attributeKeyId;
 
-    public AttributeCriteria() {
+    public AttributeCriteria(){
+    }
+
+    public AttributeCriteria(AttributeCriteria other){
+        this.id = other.id == null ? null : other.id.copy();
+        this.name = other.name == null ? null : other.name.copy();
+        this.showOrder = other.showOrder == null ? null : other.showOrder.copy();
+        this.active = other.active == null ? null : other.active.copy();
+        this.skAtExId = other.skAtExId == null ? null : other.skAtExId.copy();
+        this.parentId = other.parentId == null ? null : other.parentId.copy();
+        this.attributeKeyId = other.attributeKeyId == null ? null : other.attributeKeyId.copy();
+    }
+
+    @Override
+    public AttributeCriteria copy() {
+        return new AttributeCriteria(this);
     }
 
     public LongFilter getId() {
@@ -97,6 +110,39 @@ public class AttributeCriteria implements Serializable {
 
     public void setAttributeKeyId(LongFilter attributeKeyId) {
         this.attributeKeyId = attributeKeyId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final AttributeCriteria that = (AttributeCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(showOrder, that.showOrder) &&
+            Objects.equals(active, that.active) &&
+            Objects.equals(skAtExId, that.skAtExId) &&
+            Objects.equals(parentId, that.parentId) &&
+            Objects.equals(attributeKeyId, that.attributeKeyId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        name,
+        showOrder,
+        active,
+        skAtExId,
+        parentId,
+        attributeKeyId
+        );
     }
 
     @Override

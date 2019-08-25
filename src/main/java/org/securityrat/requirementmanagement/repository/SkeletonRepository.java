@@ -1,13 +1,12 @@
 package org.securityrat.requirementmanagement.repository;
 
 import org.securityrat.requirementmanagement.domain.Skeleton;
-import org.springframework.stereotype.Repository;
-
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
 
 /**
- * Spring Data JPA repository for the Skeleton entity.
+ * Spring Data  repository for the Skeleton entity.
  */
 @SuppressWarnings("unused")
 @Repository

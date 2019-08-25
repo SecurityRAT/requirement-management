@@ -1,0 +1,11 @@
+id;name;description;show_order;active
+1;Music;../fake-data/blob/hipster.txt;23089;true
+2;infomediaries;../fake-data/blob/hipster.txt;12203;true
+3;backing up Salad;../fake-data/blob/hipster.txt;39106;false
+4;invoice;../fake-data/blob/hipster.txt;31171;false
+5;sky blue Georgia;../fake-data/blob/hipster.txt;3131;true
+6;connect Markets Chief;../fake-data/blob/hipster.txt;59789;true
+7;archive Georgia Aruba;../fake-data/blob/hipster.txt;96117;false
+8;scale interactive generating;../fake-data/blob/hipster.txt;35675;true
+9;Home Loan Account;../fake-data/blob/hipster.txt;27599;false
+10;back-end;../fake-data/blob/hipster.txt;7455;false

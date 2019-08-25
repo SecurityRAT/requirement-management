@@ -1,0 +1,11 @@
+id;name;description;type;show_order;active
+1;deliverables reinvent 24 hour;../fake-data/blob/hipster.txt;FE_TAG;70685;true
+2;1080p Checking Account Identity;../fake-data/blob/hipster.txt;PARAMETER;62329;false
+3;Ergonomic;../fake-data/blob/hipster.txt;PARAMETER;72960;true
+4;tangible Mississippi;../fake-data/blob/hipster.txt;PARAMETER;76078;true
+5;Robust Networked;../fake-data/blob/hipster.txt;PARAMETER;42754;false
+6;partnerships;../fake-data/blob/hipster.txt;CATEGORY;63641;false
+7;Montana;../fake-data/blob/hipster.txt;CATEGORY;75555;false
+8;Brand;../fake-data/blob/hipster.txt;CATEGORY;92969;true
+9;modular Refined Squares;../fake-data/blob/hipster.txt;CATEGORY;89255;true
+10;projection Fresh;../fake-data/blob/hipster.txt;PARAMETER;22793;true

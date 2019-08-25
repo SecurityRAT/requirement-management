@@ -1,6 +1,8 @@
 package org.securityrat.requirementmanagement.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
+import io.github.jhipster.service.Criteria;
 import org.securityrat.requirementmanagement.domain.enumeration.ExtensionSection;
 import org.securityrat.requirementmanagement.domain.enumeration.ExtensionType;
 import io.github.jhipster.service.filter.BooleanFilter;
@@ -11,34 +13,54 @@ import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
-
-
-
-
-
 /**
- * Criteria class for the ExtensionKey entity. This class is used in ExtensionKeyResource to
- * receive all the possible filtering options from the Http GET request parameters.
- * For example the following could be a valid requests:
- * <code> /extension-keys?id.greaterThan=5&amp;attr1.contains=something&amp;attr2.specified=false</code>
+ * Criteria class for the {@link org.securityrat.requirementmanagement.domain.ExtensionKey} entity. This class is used
+ * in {@link org.securityrat.requirementmanagement.web.rest.ExtensionKeyResource} to receive all the possible filtering options from
+ * the Http GET request parameters.
+ * For example the following could be a valid request:
+ * {@code /extension-keys?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class ExtensionKeyCriteria implements Serializable {
+public class ExtensionKeyCriteria implements Serializable, Criteria {
     /**
      * Class for filtering ExtensionSection
      */
     public static class ExtensionSectionFilter extends Filter<ExtensionSection> {
-    }
 
+        public ExtensionSectionFilter() {
+        }
+
+        public ExtensionSectionFilter(ExtensionSectionFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public ExtensionSectionFilter copy() {
+            return new ExtensionSectionFilter(this);
+        }
+
+    }
     /**
      * Class for filtering ExtensionType
      */
     public static class ExtensionTypeFilter extends Filter<ExtensionType> {
+
+        public ExtensionTypeFilter() {
+        }
+
+        public ExtensionTypeFilter(ExtensionTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public ExtensionTypeFilter copy() {
+            return new ExtensionTypeFilter(this);
+        }
+
     }
 
     private static final long serialVersionUID = 1L;
-
 
     private LongFilter id;
 
@@ -56,7 +78,23 @@ public class ExtensionKeyCriteria implements Serializable {
 
     private LongFilter requirementSetId;
 
-    public ExtensionKeyCriteria() {
+    public ExtensionKeyCriteria(){
+    }
+
+    public ExtensionKeyCriteria(ExtensionKeyCriteria other){
+        this.id = other.id == null ? null : other.id.copy();
+        this.name = other.name == null ? null : other.name.copy();
+        this.section = other.section == null ? null : other.section.copy();
+        this.type = other.type == null ? null : other.type.copy();
+        this.showOrder = other.showOrder == null ? null : other.showOrder.copy();
+        this.active = other.active == null ? null : other.active.copy();
+        this.extensionId = other.extensionId == null ? null : other.extensionId.copy();
+        this.requirementSetId = other.requirementSetId == null ? null : other.requirementSetId.copy();
+    }
+
+    @Override
+    public ExtensionKeyCriteria copy() {
+        return new ExtensionKeyCriteria(this);
     }
 
     public LongFilter getId() {
@@ -121,6 +159,41 @@ public class ExtensionKeyCriteria implements Serializable {
 
     public void setRequirementSetId(LongFilter requirementSetId) {
         this.requirementSetId = requirementSetId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final ExtensionKeyCriteria that = (ExtensionKeyCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(section, that.section) &&
+            Objects.equals(type, that.type) &&
+            Objects.equals(showOrder, that.showOrder) &&
+            Objects.equals(active, that.active) &&
+            Objects.equals(extensionId, that.extensionId) &&
+            Objects.equals(requirementSetId, that.requirementSetId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        name,
+        section,
+        type,
+        showOrder,
+        active,
+        extensionId,
+        requirementSetId
+        );
     }
 
     @Override

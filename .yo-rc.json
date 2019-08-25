@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "org.securityrat.requirementmanagement"
     },
-    "jhipsterVersion": "4.14.1",
+    "jhipsterVersion": "6.2.0",
     "baseName": "requirementManagement",
     "packageName": "org.securityrat.requirementmanagement",
     "packageFolder": "org/securityrat/requirementmanagement",
@@ -28,6 +28,10 @@
     "clientPackageManager": "yarn",
     "skipClient": true,
     "skipUserManagement": true,
-    "enableHibernateCache": false
+    "enableHibernateCache": false,
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "blueprints": []
   }
 }

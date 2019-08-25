@@ -4,14 +4,16 @@ import org.securityrat.requirementmanagement.domain.AttributeKey;
 import org.securityrat.requirementmanagement.repository.AttributeKeyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
- * Service Implementation for managing AttributeKey.
+ * Service Implementation for managing {@link AttributeKey}.
  */
 @Service
 @Transactional
@@ -28,8 +30,8 @@ public class AttributeKeyService {
     /**
      * Save a attributeKey.
      *
-     * @param attributeKey the entity to save
-     * @return the persisted entity
+     * @param attributeKey the entity to save.
+     * @return the persisted entity.
      */
     public AttributeKey save(AttributeKey attributeKey) {
         log.debug("Request to save AttributeKey : {}", attributeKey);
@@ -39,8 +41,8 @@ public class AttributeKeyService {
     /**
      * Get all the attributeKeys.
      *
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<AttributeKey> findAll(Pageable pageable) {
@@ -48,25 +50,26 @@ public class AttributeKeyService {
         return attributeKeyRepository.findAll(pageable);
     }
 
+
     /**
      * Get one attributeKey by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     @Transactional(readOnly = true)
-    public AttributeKey findOne(Long id) {
+    public Optional<AttributeKey> findOne(Long id) {
         log.debug("Request to get AttributeKey : {}", id);
-        return attributeKeyRepository.findOne(id);
+        return attributeKeyRepository.findById(id);
     }
 
     /**
      * Delete the attributeKey by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete AttributeKey : {}", id);
-        attributeKeyRepository.delete(id);
+        attributeKeyRepository.deleteById(id);
     }
 }

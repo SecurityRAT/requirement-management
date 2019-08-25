@@ -4,14 +4,16 @@ import org.securityrat.requirementmanagement.domain.Extension;
 import org.securityrat.requirementmanagement.repository.ExtensionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
- * Service Implementation for managing Extension.
+ * Service Implementation for managing {@link Extension}.
  */
 @Service
 @Transactional
@@ -28,8 +30,8 @@ public class ExtensionService {
     /**
      * Save a extension.
      *
-     * @param extension the entity to save
-     * @return the persisted entity
+     * @param extension the entity to save.
+     * @return the persisted entity.
      */
     public Extension save(Extension extension) {
         log.debug("Request to save Extension : {}", extension);
@@ -39,8 +41,8 @@ public class ExtensionService {
     /**
      * Get all the extensions.
      *
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<Extension> findAll(Pageable pageable) {
@@ -48,25 +50,26 @@ public class ExtensionService {
         return extensionRepository.findAll(pageable);
     }
 
+
     /**
      * Get one extension by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Extension findOne(Long id) {
+    public Optional<Extension> findOne(Long id) {
         log.debug("Request to get Extension : {}", id);
-        return extensionRepository.findOne(id);
+        return extensionRepository.findById(id);
     }
 
     /**
      * Delete the extension by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete Extension : {}", id);
-        extensionRepository.delete(id);
+        extensionRepository.deleteById(id);
     }
 }

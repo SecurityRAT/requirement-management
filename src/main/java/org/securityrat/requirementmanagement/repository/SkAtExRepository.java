@@ -1,13 +1,12 @@
 package org.securityrat.requirementmanagement.repository;
 
 import org.securityrat.requirementmanagement.domain.SkAtEx;
-import org.springframework.stereotype.Repository;
-
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
 
 /**
- * Spring Data JPA repository for the SkAtEx entity.
+ * Spring Data  repository for the SkAtEx entity.
  */
 @SuppressWarnings("unused")
 @Repository
