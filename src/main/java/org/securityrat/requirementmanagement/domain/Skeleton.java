@@ -1,6 +1,5 @@
 package org.securityrat.requirementmanagement.domain;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
@@ -9,7 +8,6 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 /**
  * The 'core' part of a particular requirement.
@@ -41,10 +39,10 @@ public class Skeleton implements Serializable {
     private Boolean active;
 
     @OneToMany(mappedBy = "skeleton")
-    @JsonIgnore
     private Set<SkAtEx> skAtExes = new HashSet<>();
 
     @ManyToOne
+    @JsonIgnoreProperties("skeletons")
     private RequirementSet requirementSet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -152,19 +150,15 @@ public class Skeleton implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Skeleton)) {
             return false;
         }
-        Skeleton skeleton = (Skeleton) o;
-        if (skeleton.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), skeleton.getId());
+        return id != null && id.equals(((Skeleton) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

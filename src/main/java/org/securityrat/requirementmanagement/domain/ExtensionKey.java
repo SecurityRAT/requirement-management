@@ -1,6 +1,5 @@
 package org.securityrat.requirementmanagement.domain;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
@@ -9,7 +8,6 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 import org.securityrat.requirementmanagement.domain.enumeration.ExtensionSection;
 
@@ -43,7 +41,7 @@ public class ExtensionKey implements Serializable {
     private ExtensionSection section;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "jhi_type")
+    @Column(name = "type")
     private ExtensionType type;
 
     @Column(name = "show_order")
@@ -54,10 +52,10 @@ public class ExtensionKey implements Serializable {
     private Boolean active;
 
     @OneToMany(mappedBy = "extensionKey")
-    @JsonIgnore
     private Set<Extension> extensions = new HashSet<>();
 
     @ManyToOne
+    @JsonIgnoreProperties("extensionKeys")
     private RequirementSet requirementSet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -191,19 +189,15 @@ public class ExtensionKey implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof ExtensionKey)) {
             return false;
         }
-        ExtensionKey extensionKey = (ExtensionKey) o;
-        if (extensionKey.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), extensionKey.getId());
+        return id != null && id.equals(((ExtensionKey) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

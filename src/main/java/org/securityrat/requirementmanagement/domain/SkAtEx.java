@@ -1,11 +1,10 @@
 package org.securityrat.requirementmanagement.domain;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Implements ternary relation of req. skeleton, attribute an extension.
@@ -23,12 +22,15 @@ public class SkAtEx implements Serializable {
     private Long id;
 
     @ManyToOne
+    @JsonIgnoreProperties("skAtExes")
     private Skeleton skeleton;
 
     @ManyToOne
+    @JsonIgnoreProperties("skAtExes")
     private Attribute attribute;
 
     @ManyToOne
+    @JsonIgnoreProperties("skAtExes")
     private Extension extension;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -85,19 +87,15 @@ public class SkAtEx implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof SkAtEx)) {
             return false;
         }
-        SkAtEx skAtEx = (SkAtEx) o;
-        if (skAtEx.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), skAtEx.getId());
+        return id != null && id.equals(((SkAtEx) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

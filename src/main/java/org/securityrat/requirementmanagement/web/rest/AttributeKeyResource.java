@@ -1,20 +1,22 @@
 package org.securityrat.requirementmanagement.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import org.securityrat.requirementmanagement.domain.AttributeKey;
 import org.securityrat.requirementmanagement.service.AttributeKeyService;
 import org.securityrat.requirementmanagement.web.rest.errors.BadRequestAlertException;
-import org.securityrat.requirementmanagement.web.rest.util.HeaderUtil;
-import org.securityrat.requirementmanagement.web.rest.util.PaginationUtil;
 import org.securityrat.requirementmanagement.service.dto.AttributeKeyCriteria;
 import org.securityrat.requirementmanagement.service.AttributeKeyQueryService;
+
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing AttributeKey.
+ * REST controller for managing {@link org.securityrat.requirementmanagement.domain.AttributeKey}.
  */
 @RestController
 @RequestMapping("/api")
@@ -34,7 +36,10 @@ public class AttributeKeyResource {
 
     private final Logger log = LoggerFactory.getLogger(AttributeKeyResource.class);
 
-    private static final String ENTITY_NAME = "attributeKey";
+    private static final String ENTITY_NAME = "requirementManagementAttributeKey";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
     private final AttributeKeyService attributeKeyService;
 
@@ -46,14 +51,13 @@ public class AttributeKeyResource {
     }
 
     /**
-     * POST  /attribute-keys : Create a new attributeKey.
+     * {@code POST  /attribute-keys} : Create a new attributeKey.
      *
-     * @param attributeKey the attributeKey to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new attributeKey, or with status 400 (Bad Request) if the attributeKey has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @param attributeKey the attributeKey to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new attributeKey, or with status {@code 400 (Bad Request)} if the attributeKey has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/attribute-keys")
-    @Timed
     public ResponseEntity<AttributeKey> createAttributeKey(@Valid @RequestBody AttributeKey attributeKey) throws URISyntaxException {
         log.debug("REST request to save AttributeKey : {}", attributeKey);
         if (attributeKey.getId() != null) {
@@ -61,73 +65,83 @@ public class AttributeKeyResource {
         }
         AttributeKey result = attributeKeyService.save(attributeKey);
         return ResponseEntity.created(new URI("/api/attribute-keys/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /attribute-keys : Updates an existing attributeKey.
+     * {@code PUT  /attribute-keys} : Updates an existing attributeKey.
      *
-     * @param attributeKey the attributeKey to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated attributeKey,
-     * or with status 400 (Bad Request) if the attributeKey is not valid,
-     * or with status 500 (Internal Server Error) if the attributeKey couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @param attributeKey the attributeKey to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated attributeKey,
+     * or with status {@code 400 (Bad Request)} if the attributeKey is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the attributeKey couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/attribute-keys")
-    @Timed
     public ResponseEntity<AttributeKey> updateAttributeKey(@Valid @RequestBody AttributeKey attributeKey) throws URISyntaxException {
         log.debug("REST request to update AttributeKey : {}", attributeKey);
         if (attributeKey.getId() == null) {
-            return createAttributeKey(attributeKey);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         AttributeKey result = attributeKeyService.save(attributeKey);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, attributeKey.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, attributeKey.getId().toString()))
             .body(result);
     }
 
     /**
-     * GET  /attribute-keys : get all the attributeKeys.
+     * {@code GET  /attribute-keys} : get all the attributeKeys.
      *
-     * @param pageable the pagination information
-     * @param criteria the criterias which the requested entities should match
-     * @return the ResponseEntity with status 200 (OK) and the list of attributeKeys in body
+
+     * @param pageable the pagination information.
+
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of attributeKeys in body.
      */
     @GetMapping("/attribute-keys")
-    @Timed
     public ResponseEntity<List<AttributeKey>> getAllAttributeKeys(AttributeKeyCriteria criteria, Pageable pageable) {
         log.debug("REST request to get AttributeKeys by criteria: {}", criteria);
         Page<AttributeKey> page = attributeKeyQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/attribute-keys");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * GET  /attribute-keys/:id : get the "id" attributeKey.
+    * {@code GET  /attribute-keys/count} : count all the attributeKeys.
+    *
+    * @param criteria the criteria which the requested entities should match.
+    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+    */
+    @GetMapping("/attribute-keys/count")
+    public ResponseEntity<Long> countAttributeKeys(AttributeKeyCriteria criteria) {
+        log.debug("REST request to count AttributeKeys by criteria: {}", criteria);
+        return ResponseEntity.ok().body(attributeKeyQueryService.countByCriteria(criteria));
+    }
+
+    /**
+     * {@code GET  /attribute-keys/:id} : get the "id" attributeKey.
      *
-     * @param id the id of the attributeKey to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the attributeKey, or with status 404 (Not Found)
+     * @param id the id of the attributeKey to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the attributeKey, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/attribute-keys/{id}")
-    @Timed
     public ResponseEntity<AttributeKey> getAttributeKey(@PathVariable Long id) {
         log.debug("REST request to get AttributeKey : {}", id);
-        AttributeKey attributeKey = attributeKeyService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(attributeKey));
+        Optional<AttributeKey> attributeKey = attributeKeyService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(attributeKey);
     }
 
     /**
-     * DELETE  /attribute-keys/:id : delete the "id" attributeKey.
+     * {@code DELETE  /attribute-keys/:id} : delete the "id" attributeKey.
      *
-     * @param id the id of the attributeKey to delete
-     * @return the ResponseEntity with status 200 (OK)
+     * @param id the id of the attributeKey to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/attribute-keys/{id}")
-    @Timed
     public ResponseEntity<Void> deleteAttributeKey(@PathVariable Long id) {
         log.debug("REST request to delete AttributeKey : {}", id);
         attributeKeyService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
 }

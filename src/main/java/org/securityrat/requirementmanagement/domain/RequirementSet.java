@@ -1,6 +1,4 @@
 package org.securityrat.requirementmanagement.domain;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
@@ -9,7 +7,6 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 /**
  * Requirements are organized in different sets.
@@ -43,15 +40,12 @@ public class RequirementSet implements Serializable {
     private Boolean active;
 
     @OneToMany(mappedBy = "requirementSet")
-    @JsonIgnore
     private Set<AttributeKey> attributeKeys = new HashSet<>();
 
     @OneToMany(mappedBy = "requirementSet")
-    @JsonIgnore
     private Set<Skeleton> skeletons = new HashSet<>();
 
     @OneToMany(mappedBy = "requirementSet")
-    @JsonIgnore
     private Set<ExtensionKey> extensionKeys = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -196,19 +190,15 @@ public class RequirementSet implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof RequirementSet)) {
             return false;
         }
-        RequirementSet requirementSet = (RequirementSet) o;
-        if (requirementSet.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), requirementSet.getId());
+        return id != null && id.equals(((RequirementSet) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

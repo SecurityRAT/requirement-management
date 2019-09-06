@@ -1,6 +1,5 @@
 package org.securityrat.requirementmanagement.domain;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
@@ -9,7 +8,6 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 import org.securityrat.requirementmanagement.domain.enumeration.AttributeType;
 
@@ -38,7 +36,7 @@ public class AttributeKey implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "jhi_type", nullable = false)
+    @Column(name = "type", nullable = false)
     private AttributeType type;
 
     @Column(name = "show_order")
@@ -49,10 +47,10 @@ public class AttributeKey implements Serializable {
     private Boolean active;
 
     @OneToMany(mappedBy = "attributeKey")
-    @JsonIgnore
     private Set<Attribute> attributes = new HashSet<>();
 
     @ManyToOne
+    @JsonIgnoreProperties("attributeKeys")
     private RequirementSet requirementSet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -173,19 +171,15 @@ public class AttributeKey implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof AttributeKey)) {
             return false;
         }
-        AttributeKey attributeKey = (AttributeKey) o;
-        if (attributeKey.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), attributeKey.getId());
+        return id != null && id.equals(((AttributeKey) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

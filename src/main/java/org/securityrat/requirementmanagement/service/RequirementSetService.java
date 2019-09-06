@@ -4,14 +4,16 @@ import org.securityrat.requirementmanagement.domain.RequirementSet;
 import org.securityrat.requirementmanagement.repository.RequirementSetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
- * Service Implementation for managing RequirementSet.
+ * Service Implementation for managing {@link RequirementSet}.
  */
 @Service
 @Transactional
@@ -28,8 +30,8 @@ public class RequirementSetService {
     /**
      * Save a requirementSet.
      *
-     * @param requirementSet the entity to save
-     * @return the persisted entity
+     * @param requirementSet the entity to save.
+     * @return the persisted entity.
      */
     public RequirementSet save(RequirementSet requirementSet) {
         log.debug("Request to save RequirementSet : {}", requirementSet);
@@ -39,8 +41,8 @@ public class RequirementSetService {
     /**
      * Get all the requirementSets.
      *
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<RequirementSet> findAll(Pageable pageable) {
@@ -48,25 +50,26 @@ public class RequirementSetService {
         return requirementSetRepository.findAll(pageable);
     }
 
+
     /**
      * Get one requirementSet by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     @Transactional(readOnly = true)
-    public RequirementSet findOne(Long id) {
+    public Optional<RequirementSet> findOne(Long id) {
         log.debug("Request to get RequirementSet : {}", id);
-        return requirementSetRepository.findOne(id);
+        return requirementSetRepository.findById(id);
     }
 
     /**
      * Delete the requirementSet by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete RequirementSet : {}", id);
-        requirementSetRepository.delete(id);
+        requirementSetRepository.deleteById(id);
     }
 }

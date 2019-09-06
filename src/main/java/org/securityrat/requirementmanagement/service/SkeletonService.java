@@ -4,14 +4,16 @@ import org.securityrat.requirementmanagement.domain.Skeleton;
 import org.securityrat.requirementmanagement.repository.SkeletonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
- * Service Implementation for managing Skeleton.
+ * Service Implementation for managing {@link Skeleton}.
  */
 @Service
 @Transactional
@@ -28,8 +30,8 @@ public class SkeletonService {
     /**
      * Save a skeleton.
      *
-     * @param skeleton the entity to save
-     * @return the persisted entity
+     * @param skeleton the entity to save.
+     * @return the persisted entity.
      */
     public Skeleton save(Skeleton skeleton) {
         log.debug("Request to save Skeleton : {}", skeleton);
@@ -39,8 +41,8 @@ public class SkeletonService {
     /**
      * Get all the skeletons.
      *
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<Skeleton> findAll(Pageable pageable) {
@@ -48,25 +50,26 @@ public class SkeletonService {
         return skeletonRepository.findAll(pageable);
     }
 
+
     /**
      * Get one skeleton by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Skeleton findOne(Long id) {
+    public Optional<Skeleton> findOne(Long id) {
         log.debug("Request to get Skeleton : {}", id);
-        return skeletonRepository.findOne(id);
+        return skeletonRepository.findById(id);
     }
 
     /**
      * Delete the skeleton by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete Skeleton : {}", id);
-        skeletonRepository.delete(id);
+        skeletonRepository.deleteById(id);
     }
 }
