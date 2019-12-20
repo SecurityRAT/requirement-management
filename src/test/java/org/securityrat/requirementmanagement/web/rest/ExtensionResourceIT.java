@@ -220,6 +220,26 @@ public class ExtensionResourceIT {
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
+
+    @Test
+    @Transactional
+    public void getExtensionsByIdFiltering() throws Exception {
+        // Initialize the database
+        extensionRepository.saveAndFlush(extension);
+
+        Long id = extension.getId();
+
+        defaultExtensionShouldBeFound("id.equals=" + id);
+        defaultExtensionShouldNotBeFound("id.notEquals=" + id);
+
+        defaultExtensionShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultExtensionShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultExtensionShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultExtensionShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
     @Test
     @Transactional
     public void getAllExtensionsByShowOrderIsEqualToSomething() throws Exception {
@@ -231,6 +251,19 @@ public class ExtensionResourceIT {
 
         // Get all the extensionList where showOrder equals to UPDATED_SHOW_ORDER
         defaultExtensionShouldNotBeFound("showOrder.equals=" + UPDATED_SHOW_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllExtensionsByShowOrderIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        extensionRepository.saveAndFlush(extension);
+
+        // Get all the extensionList where showOrder not equals to DEFAULT_SHOW_ORDER
+        defaultExtensionShouldNotBeFound("showOrder.notEquals=" + DEFAULT_SHOW_ORDER);
+
+        // Get all the extensionList where showOrder not equals to UPDATED_SHOW_ORDER
+        defaultExtensionShouldBeFound("showOrder.notEquals=" + UPDATED_SHOW_ORDER);
     }
 
     @Test
@@ -323,6 +356,19 @@ public class ExtensionResourceIT {
 
         // Get all the extensionList where active equals to UPDATED_ACTIVE
         defaultExtensionShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllExtensionsByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        extensionRepository.saveAndFlush(extension);
+
+        // Get all the extensionList where active not equals to DEFAULT_ACTIVE
+        defaultExtensionShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the extensionList where active not equals to UPDATED_ACTIVE
+        defaultExtensionShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
     }
 
     @Test
@@ -503,20 +549,5 @@ public class ExtensionResourceIT {
         // Validate the database contains one less item
         List<Extension> extensionList = extensionRepository.findAll();
         assertThat(extensionList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Extension.class);
-        Extension extension1 = new Extension();
-        extension1.setId(1L);
-        Extension extension2 = new Extension();
-        extension2.setId(extension1.getId());
-        assertThat(extension1).isEqualTo(extension2);
-        extension2.setId(2L);
-        assertThat(extension1).isNotEqualTo(extension2);
-        extension1.setId(null);
-        assertThat(extension1).isNotEqualTo(extension2);
     }
 }

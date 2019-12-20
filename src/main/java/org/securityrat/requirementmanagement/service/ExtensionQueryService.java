@@ -75,15 +75,15 @@ public class ExtensionQueryService extends QueryService<Extension> {
     }
 
     /**
-     * Function to convert ConsumerCriteria to a {@link Specification}
+     * Function to convert {@link ExtensionCriteria} to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
-     */    
+     */
     protected Specification<Extension> createSpecification(ExtensionCriteria criteria) {
         Specification<Extension> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), Extension_.id));
+                specification = specification.and(buildRangeSpecification(criteria.getId(), Extension_.id));
             }
             if (criteria.getShowOrder() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getShowOrder(), Extension_.showOrder));

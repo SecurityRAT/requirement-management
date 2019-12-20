@@ -169,6 +169,26 @@ public class SkAtExResourceIT {
             .andExpect(jsonPath("$.id").value(skAtEx.getId().intValue()));
     }
 
+
+    @Test
+    @Transactional
+    public void getSkAtExesByIdFiltering() throws Exception {
+        // Initialize the database
+        skAtExRepository.saveAndFlush(skAtEx);
+
+        Long id = skAtEx.getId();
+
+        defaultSkAtExShouldBeFound("id.equals=" + id);
+        defaultSkAtExShouldNotBeFound("id.notEquals=" + id);
+
+        defaultSkAtExShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultSkAtExShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultSkAtExShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultSkAtExShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
     @Test
     @Transactional
     public void getAllSkAtExesBySkeletonIsEqualToSomething() throws Exception {
@@ -328,20 +348,5 @@ public class SkAtExResourceIT {
         // Validate the database contains one less item
         List<SkAtEx> skAtExList = skAtExRepository.findAll();
         assertThat(skAtExList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(SkAtEx.class);
-        SkAtEx skAtEx1 = new SkAtEx();
-        skAtEx1.setId(1L);
-        SkAtEx skAtEx2 = new SkAtEx();
-        skAtEx2.setId(skAtEx1.getId());
-        assertThat(skAtEx1).isEqualTo(skAtEx2);
-        skAtEx2.setId(2L);
-        assertThat(skAtEx1).isNotEqualTo(skAtEx2);
-        skAtEx1.setId(null);
-        assertThat(skAtEx1).isNotEqualTo(skAtEx2);
     }
 }

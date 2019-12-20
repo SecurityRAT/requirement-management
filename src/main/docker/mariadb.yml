@@ -1,7 +1,7 @@
 version: '2'
 services:
   requirementmanagement-mariadb:
-    image: mariadb:10.4.6
+    image: mariadb:10.4.8
     # volumes:
     #     - ~/volumes/jhipster/requirementManagement/mysql/:/var/lib/mysql/
     environment:

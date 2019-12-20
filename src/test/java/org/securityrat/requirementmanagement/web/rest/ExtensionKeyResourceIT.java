@@ -247,7 +247,7 @@ public class ExtensionKeyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(extensionKey.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].section").value(hasItem(DEFAULT_SECTION.toString())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
@@ -266,13 +266,33 @@ public class ExtensionKeyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(extensionKey.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.section").value(DEFAULT_SECTION.toString()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.showOrder").value(DEFAULT_SHOW_ORDER))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
+
+
+    @Test
+    @Transactional
+    public void getExtensionKeysByIdFiltering() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        Long id = extensionKey.getId();
+
+        defaultExtensionKeyShouldBeFound("id.equals=" + id);
+        defaultExtensionKeyShouldNotBeFound("id.notEquals=" + id);
+
+        defaultExtensionKeyShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultExtensionKeyShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultExtensionKeyShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultExtensionKeyShouldNotBeFound("id.lessThan=" + id);
+    }
+
 
     @Test
     @Transactional
@@ -285,6 +305,19 @@ public class ExtensionKeyResourceIT {
 
         // Get all the extensionKeyList where name equals to UPDATED_NAME
         defaultExtensionKeyShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllExtensionKeysByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        // Get all the extensionKeyList where name not equals to DEFAULT_NAME
+        defaultExtensionKeyShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the extensionKeyList where name not equals to UPDATED_NAME
+        defaultExtensionKeyShouldBeFound("name.notEquals=" + UPDATED_NAME);
     }
 
     @Test
@@ -312,6 +345,32 @@ public class ExtensionKeyResourceIT {
         // Get all the extensionKeyList where name is null
         defaultExtensionKeyShouldNotBeFound("name.specified=false");
     }
+                @Test
+    @Transactional
+    public void getAllExtensionKeysByNameContainsSomething() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        // Get all the extensionKeyList where name contains DEFAULT_NAME
+        defaultExtensionKeyShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the extensionKeyList where name contains UPDATED_NAME
+        defaultExtensionKeyShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllExtensionKeysByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        // Get all the extensionKeyList where name does not contain DEFAULT_NAME
+        defaultExtensionKeyShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the extensionKeyList where name does not contain UPDATED_NAME
+        defaultExtensionKeyShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
 
     @Test
     @Transactional
@@ -324,6 +383,19 @@ public class ExtensionKeyResourceIT {
 
         // Get all the extensionKeyList where section equals to UPDATED_SECTION
         defaultExtensionKeyShouldNotBeFound("section.equals=" + UPDATED_SECTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllExtensionKeysBySectionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        // Get all the extensionKeyList where section not equals to DEFAULT_SECTION
+        defaultExtensionKeyShouldNotBeFound("section.notEquals=" + DEFAULT_SECTION);
+
+        // Get all the extensionKeyList where section not equals to UPDATED_SECTION
+        defaultExtensionKeyShouldBeFound("section.notEquals=" + UPDATED_SECTION);
     }
 
     @Test
@@ -367,6 +439,19 @@ public class ExtensionKeyResourceIT {
 
     @Test
     @Transactional
+    public void getAllExtensionKeysByTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        // Get all the extensionKeyList where type not equals to DEFAULT_TYPE
+        defaultExtensionKeyShouldNotBeFound("type.notEquals=" + DEFAULT_TYPE);
+
+        // Get all the extensionKeyList where type not equals to UPDATED_TYPE
+        defaultExtensionKeyShouldBeFound("type.notEquals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
     public void getAllExtensionKeysByTypeIsInShouldWork() throws Exception {
         // Initialize the database
         extensionKeyRepository.saveAndFlush(extensionKey);
@@ -402,6 +487,19 @@ public class ExtensionKeyResourceIT {
 
         // Get all the extensionKeyList where showOrder equals to UPDATED_SHOW_ORDER
         defaultExtensionKeyShouldNotBeFound("showOrder.equals=" + UPDATED_SHOW_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllExtensionKeysByShowOrderIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        // Get all the extensionKeyList where showOrder not equals to DEFAULT_SHOW_ORDER
+        defaultExtensionKeyShouldNotBeFound("showOrder.notEquals=" + DEFAULT_SHOW_ORDER);
+
+        // Get all the extensionKeyList where showOrder not equals to UPDATED_SHOW_ORDER
+        defaultExtensionKeyShouldBeFound("showOrder.notEquals=" + UPDATED_SHOW_ORDER);
     }
 
     @Test
@@ -494,6 +592,19 @@ public class ExtensionKeyResourceIT {
 
         // Get all the extensionKeyList where active equals to UPDATED_ACTIVE
         defaultExtensionKeyShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllExtensionKeysByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        extensionKeyRepository.saveAndFlush(extensionKey);
+
+        // Get all the extensionKeyList where active not equals to DEFAULT_ACTIVE
+        defaultExtensionKeyShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the extensionKeyList where active not equals to UPDATED_ACTIVE
+        defaultExtensionKeyShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
     }
 
     @Test
@@ -680,20 +791,5 @@ public class ExtensionKeyResourceIT {
         // Validate the database contains one less item
         List<ExtensionKey> extensionKeyList = extensionKeyRepository.findAll();
         assertThat(extensionKeyList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ExtensionKey.class);
-        ExtensionKey extensionKey1 = new ExtensionKey();
-        extensionKey1.setId(1L);
-        ExtensionKey extensionKey2 = new ExtensionKey();
-        extensionKey2.setId(extensionKey1.getId());
-        assertThat(extensionKey1).isEqualTo(extensionKey2);
-        extensionKey2.setId(2L);
-        assertThat(extensionKey1).isNotEqualTo(extensionKey2);
-        extensionKey1.setId(null);
-        assertThat(extensionKey1).isNotEqualTo(extensionKey2);
     }
 }

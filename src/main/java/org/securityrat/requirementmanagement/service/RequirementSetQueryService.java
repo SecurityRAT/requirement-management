@@ -75,15 +75,15 @@ public class RequirementSetQueryService extends QueryService<RequirementSet> {
     }
 
     /**
-     * Function to convert ConsumerCriteria to a {@link Specification}
+     * Function to convert {@link RequirementSetCriteria} to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
-     */    
+     */
     protected Specification<RequirementSet> createSpecification(RequirementSetCriteria criteria) {
         Specification<RequirementSet> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), RequirementSet_.id));
+                specification = specification.and(buildRangeSpecification(criteria.getId(), RequirementSet_.id));
             }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), RequirementSet_.name));
