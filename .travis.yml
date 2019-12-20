@@ -51,6 +51,7 @@ deploy:
   script: bash $REPOS_SCRIPTS/docker_push
   on:
     branch: master
+    condition: "-n $TAG_NAME"
 notifications:
   email:
     on_success: change
