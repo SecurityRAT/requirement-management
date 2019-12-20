@@ -75,15 +75,15 @@ public class AttributeQueryService extends QueryService<Attribute> {
     }
 
     /**
-     * Function to convert ConsumerCriteria to a {@link Specification}
+     * Function to convert {@link AttributeCriteria} to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
-     */    
+     */
     protected Specification<Attribute> createSpecification(AttributeCriteria criteria) {
         Specification<Attribute> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), Attribute_.id));
+                specification = specification.and(buildRangeSpecification(criteria.getId(), Attribute_.id));
             }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), Attribute_.name));

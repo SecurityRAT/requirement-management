@@ -216,7 +216,7 @@ public class AttributeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(attribute.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].showOrder").value(hasItem(DEFAULT_SHOW_ORDER)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -233,11 +233,31 @@ public class AttributeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(attribute.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.showOrder").value(DEFAULT_SHOW_ORDER))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
+
+
+    @Test
+    @Transactional
+    public void getAttributesByIdFiltering() throws Exception {
+        // Initialize the database
+        attributeRepository.saveAndFlush(attribute);
+
+        Long id = attribute.getId();
+
+        defaultAttributeShouldBeFound("id.equals=" + id);
+        defaultAttributeShouldNotBeFound("id.notEquals=" + id);
+
+        defaultAttributeShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultAttributeShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultAttributeShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultAttributeShouldNotBeFound("id.lessThan=" + id);
+    }
+
 
     @Test
     @Transactional
@@ -250,6 +270,19 @@ public class AttributeResourceIT {
 
         // Get all the attributeList where name equals to UPDATED_NAME
         defaultAttributeShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributesByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        attributeRepository.saveAndFlush(attribute);
+
+        // Get all the attributeList where name not equals to DEFAULT_NAME
+        defaultAttributeShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the attributeList where name not equals to UPDATED_NAME
+        defaultAttributeShouldBeFound("name.notEquals=" + UPDATED_NAME);
     }
 
     @Test
@@ -277,6 +310,32 @@ public class AttributeResourceIT {
         // Get all the attributeList where name is null
         defaultAttributeShouldNotBeFound("name.specified=false");
     }
+                @Test
+    @Transactional
+    public void getAllAttributesByNameContainsSomething() throws Exception {
+        // Initialize the database
+        attributeRepository.saveAndFlush(attribute);
+
+        // Get all the attributeList where name contains DEFAULT_NAME
+        defaultAttributeShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the attributeList where name contains UPDATED_NAME
+        defaultAttributeShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributesByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        attributeRepository.saveAndFlush(attribute);
+
+        // Get all the attributeList where name does not contain DEFAULT_NAME
+        defaultAttributeShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the attributeList where name does not contain UPDATED_NAME
+        defaultAttributeShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
 
     @Test
     @Transactional
@@ -289,6 +348,19 @@ public class AttributeResourceIT {
 
         // Get all the attributeList where showOrder equals to UPDATED_SHOW_ORDER
         defaultAttributeShouldNotBeFound("showOrder.equals=" + UPDATED_SHOW_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributesByShowOrderIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        attributeRepository.saveAndFlush(attribute);
+
+        // Get all the attributeList where showOrder not equals to DEFAULT_SHOW_ORDER
+        defaultAttributeShouldNotBeFound("showOrder.notEquals=" + DEFAULT_SHOW_ORDER);
+
+        // Get all the attributeList where showOrder not equals to UPDATED_SHOW_ORDER
+        defaultAttributeShouldBeFound("showOrder.notEquals=" + UPDATED_SHOW_ORDER);
     }
 
     @Test
@@ -381,6 +453,19 @@ public class AttributeResourceIT {
 
         // Get all the attributeList where active equals to UPDATED_ACTIVE
         defaultAttributeShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributesByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        attributeRepository.saveAndFlush(attribute);
+
+        // Get all the attributeList where active not equals to DEFAULT_ACTIVE
+        defaultAttributeShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the attributeList where active not equals to UPDATED_ACTIVE
+        defaultAttributeShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
     }
 
     @Test
@@ -581,20 +666,5 @@ public class AttributeResourceIT {
         // Validate the database contains one less item
         List<Attribute> attributeList = attributeRepository.findAll();
         assertThat(attributeList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Attribute.class);
-        Attribute attribute1 = new Attribute();
-        attribute1.setId(1L);
-        Attribute attribute2 = new Attribute();
-        attribute2.setId(attribute1.getId());
-        assertThat(attribute1).isEqualTo(attribute2);
-        attribute2.setId(2L);
-        assertThat(attribute1).isNotEqualTo(attribute2);
-        attribute1.setId(null);
-        assertThat(attribute1).isNotEqualTo(attribute2);
     }
 }

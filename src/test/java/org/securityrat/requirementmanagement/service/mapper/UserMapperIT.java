@@ -1,6 +1,5 @@
 package org.securityrat.requirementmanagement.service.mapper;
 
-
 import org.securityrat.requirementmanagement.RequirementManagementApp;
 import org.securityrat.requirementmanagement.config.TestSecurityConfiguration;
 import org.securityrat.requirementmanagement.domain.User;

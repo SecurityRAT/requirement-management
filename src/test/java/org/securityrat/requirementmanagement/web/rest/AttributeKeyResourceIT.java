@@ -240,7 +240,7 @@ public class AttributeKeyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(attributeKey.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].showOrder").value(hasItem(DEFAULT_SHOW_ORDER)))
@@ -258,12 +258,32 @@ public class AttributeKeyResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(attributeKey.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.showOrder").value(DEFAULT_SHOW_ORDER))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
+
+
+    @Test
+    @Transactional
+    public void getAttributeKeysByIdFiltering() throws Exception {
+        // Initialize the database
+        attributeKeyRepository.saveAndFlush(attributeKey);
+
+        Long id = attributeKey.getId();
+
+        defaultAttributeKeyShouldBeFound("id.equals=" + id);
+        defaultAttributeKeyShouldNotBeFound("id.notEquals=" + id);
+
+        defaultAttributeKeyShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultAttributeKeyShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultAttributeKeyShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultAttributeKeyShouldNotBeFound("id.lessThan=" + id);
+    }
+
 
     @Test
     @Transactional
@@ -276,6 +296,19 @@ public class AttributeKeyResourceIT {
 
         // Get all the attributeKeyList where name equals to UPDATED_NAME
         defaultAttributeKeyShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributeKeysByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        attributeKeyRepository.saveAndFlush(attributeKey);
+
+        // Get all the attributeKeyList where name not equals to DEFAULT_NAME
+        defaultAttributeKeyShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the attributeKeyList where name not equals to UPDATED_NAME
+        defaultAttributeKeyShouldBeFound("name.notEquals=" + UPDATED_NAME);
     }
 
     @Test
@@ -303,6 +336,32 @@ public class AttributeKeyResourceIT {
         // Get all the attributeKeyList where name is null
         defaultAttributeKeyShouldNotBeFound("name.specified=false");
     }
+                @Test
+    @Transactional
+    public void getAllAttributeKeysByNameContainsSomething() throws Exception {
+        // Initialize the database
+        attributeKeyRepository.saveAndFlush(attributeKey);
+
+        // Get all the attributeKeyList where name contains DEFAULT_NAME
+        defaultAttributeKeyShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the attributeKeyList where name contains UPDATED_NAME
+        defaultAttributeKeyShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributeKeysByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        attributeKeyRepository.saveAndFlush(attributeKey);
+
+        // Get all the attributeKeyList where name does not contain DEFAULT_NAME
+        defaultAttributeKeyShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the attributeKeyList where name does not contain UPDATED_NAME
+        defaultAttributeKeyShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
 
     @Test
     @Transactional
@@ -315,6 +374,19 @@ public class AttributeKeyResourceIT {
 
         // Get all the attributeKeyList where type equals to UPDATED_TYPE
         defaultAttributeKeyShouldNotBeFound("type.equals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributeKeysByTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        attributeKeyRepository.saveAndFlush(attributeKey);
+
+        // Get all the attributeKeyList where type not equals to DEFAULT_TYPE
+        defaultAttributeKeyShouldNotBeFound("type.notEquals=" + DEFAULT_TYPE);
+
+        // Get all the attributeKeyList where type not equals to UPDATED_TYPE
+        defaultAttributeKeyShouldBeFound("type.notEquals=" + UPDATED_TYPE);
     }
 
     @Test
@@ -354,6 +426,19 @@ public class AttributeKeyResourceIT {
 
         // Get all the attributeKeyList where showOrder equals to UPDATED_SHOW_ORDER
         defaultAttributeKeyShouldNotBeFound("showOrder.equals=" + UPDATED_SHOW_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributeKeysByShowOrderIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        attributeKeyRepository.saveAndFlush(attributeKey);
+
+        // Get all the attributeKeyList where showOrder not equals to DEFAULT_SHOW_ORDER
+        defaultAttributeKeyShouldNotBeFound("showOrder.notEquals=" + DEFAULT_SHOW_ORDER);
+
+        // Get all the attributeKeyList where showOrder not equals to UPDATED_SHOW_ORDER
+        defaultAttributeKeyShouldBeFound("showOrder.notEquals=" + UPDATED_SHOW_ORDER);
     }
 
     @Test
@@ -446,6 +531,19 @@ public class AttributeKeyResourceIT {
 
         // Get all the attributeKeyList where active equals to UPDATED_ACTIVE
         defaultAttributeKeyShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAttributeKeysByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        attributeKeyRepository.saveAndFlush(attributeKey);
+
+        // Get all the attributeKeyList where active not equals to DEFAULT_ACTIVE
+        defaultAttributeKeyShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the attributeKeyList where active not equals to UPDATED_ACTIVE
+        defaultAttributeKeyShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
     }
 
     @Test
@@ -629,20 +727,5 @@ public class AttributeKeyResourceIT {
         // Validate the database contains one less item
         List<AttributeKey> attributeKeyList = attributeKeyRepository.findAll();
         assertThat(attributeKeyList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AttributeKey.class);
-        AttributeKey attributeKey1 = new AttributeKey();
-        attributeKey1.setId(1L);
-        AttributeKey attributeKey2 = new AttributeKey();
-        attributeKey2.setId(attributeKey1.getId());
-        assertThat(attributeKey1).isEqualTo(attributeKey2);
-        attributeKey2.setId(2L);
-        assertThat(attributeKey1).isNotEqualTo(attributeKey2);
-        attributeKey1.setId(null);
-        assertThat(attributeKey1).isNotEqualTo(attributeKey2);
     }
 }

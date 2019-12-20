@@ -19,8 +19,6 @@ import java.time.Instant;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
-
-
     Optional<User> findOneByEmailIgnoreCase(String email);
 
     Optional<User> findOneByLogin(String login);

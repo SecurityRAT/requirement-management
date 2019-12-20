@@ -216,7 +216,7 @@ public class RequirementSetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(requirementSet.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].showOrder").value(hasItem(DEFAULT_SHOW_ORDER)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -233,11 +233,31 @@ public class RequirementSetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(requirementSet.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.showOrder").value(DEFAULT_SHOW_ORDER))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
+
+
+    @Test
+    @Transactional
+    public void getRequirementSetsByIdFiltering() throws Exception {
+        // Initialize the database
+        requirementSetRepository.saveAndFlush(requirementSet);
+
+        Long id = requirementSet.getId();
+
+        defaultRequirementSetShouldBeFound("id.equals=" + id);
+        defaultRequirementSetShouldNotBeFound("id.notEquals=" + id);
+
+        defaultRequirementSetShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultRequirementSetShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultRequirementSetShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultRequirementSetShouldNotBeFound("id.lessThan=" + id);
+    }
+
 
     @Test
     @Transactional
@@ -250,6 +270,19 @@ public class RequirementSetResourceIT {
 
         // Get all the requirementSetList where name equals to UPDATED_NAME
         defaultRequirementSetShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRequirementSetsByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        requirementSetRepository.saveAndFlush(requirementSet);
+
+        // Get all the requirementSetList where name not equals to DEFAULT_NAME
+        defaultRequirementSetShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the requirementSetList where name not equals to UPDATED_NAME
+        defaultRequirementSetShouldBeFound("name.notEquals=" + UPDATED_NAME);
     }
 
     @Test
@@ -277,6 +310,32 @@ public class RequirementSetResourceIT {
         // Get all the requirementSetList where name is null
         defaultRequirementSetShouldNotBeFound("name.specified=false");
     }
+                @Test
+    @Transactional
+    public void getAllRequirementSetsByNameContainsSomething() throws Exception {
+        // Initialize the database
+        requirementSetRepository.saveAndFlush(requirementSet);
+
+        // Get all the requirementSetList where name contains DEFAULT_NAME
+        defaultRequirementSetShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the requirementSetList where name contains UPDATED_NAME
+        defaultRequirementSetShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRequirementSetsByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        requirementSetRepository.saveAndFlush(requirementSet);
+
+        // Get all the requirementSetList where name does not contain DEFAULT_NAME
+        defaultRequirementSetShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the requirementSetList where name does not contain UPDATED_NAME
+        defaultRequirementSetShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
 
     @Test
     @Transactional
@@ -289,6 +348,19 @@ public class RequirementSetResourceIT {
 
         // Get all the requirementSetList where showOrder equals to UPDATED_SHOW_ORDER
         defaultRequirementSetShouldNotBeFound("showOrder.equals=" + UPDATED_SHOW_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRequirementSetsByShowOrderIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        requirementSetRepository.saveAndFlush(requirementSet);
+
+        // Get all the requirementSetList where showOrder not equals to DEFAULT_SHOW_ORDER
+        defaultRequirementSetShouldNotBeFound("showOrder.notEquals=" + DEFAULT_SHOW_ORDER);
+
+        // Get all the requirementSetList where showOrder not equals to UPDATED_SHOW_ORDER
+        defaultRequirementSetShouldBeFound("showOrder.notEquals=" + UPDATED_SHOW_ORDER);
     }
 
     @Test
@@ -381,6 +453,19 @@ public class RequirementSetResourceIT {
 
         // Get all the requirementSetList where active equals to UPDATED_ACTIVE
         defaultRequirementSetShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRequirementSetsByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        requirementSetRepository.saveAndFlush(requirementSet);
+
+        // Get all the requirementSetList where active not equals to DEFAULT_ACTIVE
+        defaultRequirementSetShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the requirementSetList where active not equals to UPDATED_ACTIVE
+        defaultRequirementSetShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
     }
 
     @Test
@@ -581,20 +666,5 @@ public class RequirementSetResourceIT {
         // Validate the database contains one less item
         List<RequirementSet> requirementSetList = requirementSetRepository.findAll();
         assertThat(requirementSetList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RequirementSet.class);
-        RequirementSet requirementSet1 = new RequirementSet();
-        requirementSet1.setId(1L);
-        RequirementSet requirementSet2 = new RequirementSet();
-        requirementSet2.setId(requirementSet1.getId());
-        assertThat(requirementSet1).isEqualTo(requirementSet2);
-        requirementSet2.setId(2L);
-        assertThat(requirementSet1).isNotEqualTo(requirementSet2);
-        requirementSet1.setId(null);
-        assertThat(requirementSet1).isNotEqualTo(requirementSet2);
     }
 }

@@ -215,7 +215,7 @@ public class SkeletonResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(skeleton.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].showOrder").value(hasItem(DEFAULT_SHOW_ORDER)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -232,11 +232,31 @@ public class SkeletonResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(skeleton.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.showOrder").value(DEFAULT_SHOW_ORDER))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
+
+
+    @Test
+    @Transactional
+    public void getSkeletonsByIdFiltering() throws Exception {
+        // Initialize the database
+        skeletonRepository.saveAndFlush(skeleton);
+
+        Long id = skeleton.getId();
+
+        defaultSkeletonShouldBeFound("id.equals=" + id);
+        defaultSkeletonShouldNotBeFound("id.notEquals=" + id);
+
+        defaultSkeletonShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultSkeletonShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultSkeletonShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultSkeletonShouldNotBeFound("id.lessThan=" + id);
+    }
+
 
     @Test
     @Transactional
@@ -249,6 +269,19 @@ public class SkeletonResourceIT {
 
         // Get all the skeletonList where name equals to UPDATED_NAME
         defaultSkeletonShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSkeletonsByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        skeletonRepository.saveAndFlush(skeleton);
+
+        // Get all the skeletonList where name not equals to DEFAULT_NAME
+        defaultSkeletonShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the skeletonList where name not equals to UPDATED_NAME
+        defaultSkeletonShouldBeFound("name.notEquals=" + UPDATED_NAME);
     }
 
     @Test
@@ -276,6 +309,32 @@ public class SkeletonResourceIT {
         // Get all the skeletonList where name is null
         defaultSkeletonShouldNotBeFound("name.specified=false");
     }
+                @Test
+    @Transactional
+    public void getAllSkeletonsByNameContainsSomething() throws Exception {
+        // Initialize the database
+        skeletonRepository.saveAndFlush(skeleton);
+
+        // Get all the skeletonList where name contains DEFAULT_NAME
+        defaultSkeletonShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the skeletonList where name contains UPDATED_NAME
+        defaultSkeletonShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSkeletonsByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        skeletonRepository.saveAndFlush(skeleton);
+
+        // Get all the skeletonList where name does not contain DEFAULT_NAME
+        defaultSkeletonShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the skeletonList where name does not contain UPDATED_NAME
+        defaultSkeletonShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
 
     @Test
     @Transactional
@@ -288,6 +347,19 @@ public class SkeletonResourceIT {
 
         // Get all the skeletonList where showOrder equals to UPDATED_SHOW_ORDER
         defaultSkeletonShouldNotBeFound("showOrder.equals=" + UPDATED_SHOW_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSkeletonsByShowOrderIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        skeletonRepository.saveAndFlush(skeleton);
+
+        // Get all the skeletonList where showOrder not equals to DEFAULT_SHOW_ORDER
+        defaultSkeletonShouldNotBeFound("showOrder.notEquals=" + DEFAULT_SHOW_ORDER);
+
+        // Get all the skeletonList where showOrder not equals to UPDATED_SHOW_ORDER
+        defaultSkeletonShouldBeFound("showOrder.notEquals=" + UPDATED_SHOW_ORDER);
     }
 
     @Test
@@ -380,6 +452,19 @@ public class SkeletonResourceIT {
 
         // Get all the skeletonList where active equals to UPDATED_ACTIVE
         defaultSkeletonShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSkeletonsByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        skeletonRepository.saveAndFlush(skeleton);
+
+        // Get all the skeletonList where active not equals to DEFAULT_ACTIVE
+        defaultSkeletonShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the skeletonList where active not equals to UPDATED_ACTIVE
+        defaultSkeletonShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
     }
 
     @Test
@@ -560,20 +645,5 @@ public class SkeletonResourceIT {
         // Validate the database contains one less item
         List<Skeleton> skeletonList = skeletonRepository.findAll();
         assertThat(skeletonList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Skeleton.class);
-        Skeleton skeleton1 = new Skeleton();
-        skeleton1.setId(1L);
-        Skeleton skeleton2 = new Skeleton();
-        skeleton2.setId(skeleton1.getId());
-        assertThat(skeleton1).isEqualTo(skeleton2);
-        skeleton2.setId(2L);
-        assertThat(skeleton1).isNotEqualTo(skeleton2);
-        skeleton1.setId(null);
-        assertThat(skeleton1).isNotEqualTo(skeleton2);
     }
 }

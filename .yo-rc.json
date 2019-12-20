@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "org.securityrat.requirementmanagement"
     },
-    "jhipsterVersion": "6.2.0",
+    "jhipsterVersion": "6.5.1",
     "baseName": "requirementManagement",
     "packageName": "org.securityrat.requirementmanagement",
     "packageFolder": "org/securityrat/requirementmanagement",
@@ -32,6 +32,7 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "blueprints": []
+    "blueprints": [],
+    "embeddableLaunchScript": false
   }
 }

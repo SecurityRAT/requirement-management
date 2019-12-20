@@ -1,5 +1,4 @@
 package org.securityrat.requirementmanagement.repository;
-
 import org.securityrat.requirementmanagement.domain.ExtensionKey;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

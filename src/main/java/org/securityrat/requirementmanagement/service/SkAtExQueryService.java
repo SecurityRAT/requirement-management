@@ -75,15 +75,15 @@ public class SkAtExQueryService extends QueryService<SkAtEx> {
     }
 
     /**
-     * Function to convert ConsumerCriteria to a {@link Specification}
+     * Function to convert {@link SkAtExCriteria} to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
-     */    
+     */
     protected Specification<SkAtEx> createSpecification(SkAtExCriteria criteria) {
         Specification<SkAtEx> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), SkAtEx_.id));
+                specification = specification.and(buildRangeSpecification(criteria.getId(), SkAtEx_.id));
             }
             if (criteria.getSkeletonId() != null) {
                 specification = specification.and(buildSpecification(criteria.getSkeletonId(),
