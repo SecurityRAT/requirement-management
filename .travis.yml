@@ -4,7 +4,7 @@ services:
 - docker
 language: node_js
 node_js:
-- 8.9.4
+- 13.5.0
 jdk:
 - openjdk8
 sudo: false
@@ -26,7 +26,7 @@ addons:
 env:
   global:
   - REPOS_SCRIPTS=$TRAVIS_BUILD_DIR/travis/scripts
-  - NODE_VERSION=8.9.4
+  - NODE_VERSION=13.5.0
   - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
   - SPRING_JPA_SHOW_SQL=false
   - DOCKER_REPO=securityrat/requirement-management
