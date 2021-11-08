@@ -23,7 +23,7 @@ public class Extension implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    
+
     @Lob
     @Column(name = "content", nullable = false)
     private String content;
@@ -43,7 +43,7 @@ public class Extension implements Serializable {
     private Set<SkAtEx> skAtExes = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("extensions")
+    @JsonIgnoreProperties(value="extensions", allowSetters = true)
     private ExtensionKey extensionKey;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

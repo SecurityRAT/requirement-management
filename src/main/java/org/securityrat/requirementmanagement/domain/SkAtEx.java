@@ -22,15 +22,15 @@ public class SkAtEx implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("skAtExes")
+    @JsonIgnoreProperties(value="skAtExes", allowSetters = true)
     private Skeleton skeleton;
 
     @ManyToOne
-    @JsonIgnoreProperties("skAtExes")
+    @JsonIgnoreProperties(value="skAtExes", allowSetters = true)
     private Attribute attribute;
 
     @ManyToOne
-    @JsonIgnoreProperties("skAtExes")
+    @JsonIgnoreProperties(value="skAtExes", allowSetters = true)
     private Extension extension;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

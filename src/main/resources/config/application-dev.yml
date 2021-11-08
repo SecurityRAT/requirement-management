@@ -43,7 +43,7 @@ spring:
       port: 8500
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:./target/h2db/db/requirementmanagement;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:file:./target/h2db/db/requirementmanagement;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
     username: requirementManagement
     password:
     hikari:

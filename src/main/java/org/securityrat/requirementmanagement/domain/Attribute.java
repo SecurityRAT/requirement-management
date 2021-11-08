@@ -43,11 +43,11 @@ public class Attribute implements Serializable {
     private Set<SkAtEx> skAtExes = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("attributes")
+    @JsonIgnoreProperties(value="attributes", allowSetters = true)
     private Attribute parent;
 
     @ManyToOne
-    @JsonIgnoreProperties("attributes")
+    @JsonIgnoreProperties(value="attributes", allowSetters = true)
     private AttributeKey attributeKey;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -42,7 +42,7 @@ public class Skeleton implements Serializable {
     private Set<SkAtEx> skAtExes = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("skeletons")
+    @JsonIgnoreProperties(value="skeletons", allowSetters = true)
     private RequirementSet requirementSet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -50,7 +50,7 @@ public class AttributeKey implements Serializable {
     private Set<Attribute> attributes = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("attributeKeys")
+    @JsonIgnoreProperties(value="attributeKeys", allowSetters = true)
     private RequirementSet requirementSet;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
